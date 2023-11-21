@@ -1,8 +1,13 @@
+import json
+
 class TuringMachine:
-    def __init__(self, transitions, acceptance):
-        self.transitions = transitions
+    def __init__(self, states, input_alphabet, tape_alphabet, initial_state, acceptance, transitions):
+        self.states = states
+        self.input_alphabet = input_alphabet
+        self.tape_alphabet = tape_alphabet
+        self.state = initial_state
         self.acceptance = acceptance
-        self.state = 'q0'
+        self.transitions = transitions
         self.position = 0
         self.tape = []
 
@@ -28,43 +33,30 @@ class TuringMachine:
 
 if __name__ == "__main__":
     
-    '''transitions = [
-        {'currentState': 'q0', 'tapeInput': '0', 'writeTape': '0', 'direction': 'R', 'nextState': 'q0'},
-        {'currentState': 'q0', 'tapeInput': '1', 'writeTape': '1', 'direction': 'R', 'nextState': 'q1'},
-        {'currentState': 'q1', 'tapeInput': '0', 'writeTape': '0', 'direction': 'R', 'nextState': 'q1'},
-        {'currentState': 'q1', 'tapeInput': 'B', 'writeTape': 'B', 'direction': 'R', 'nextState': 'q2'}
-    ]'''
+    # Obtener componentes para la máquina
     
-    transitions = [
-        {'currentState': 'q0', 'tapeInput': '1', 'writeTape': '1', 'direction': 'R', 'nextState': 'q0'},
-        {'currentState': 'q0', 'tapeInput': '-', 'writeTape': '-', 'direction': 'R', 'nextState': 'q1'},
-        {'currentState': 'q1', 'tapeInput': '1', 'writeTape': 'X', 'direction': 'L', 'nextState': 'q1'},
-        {'currentState': 'q1', 'tapeInput': '-', 'writeTape': '-', 'direction': 'L', 'nextState': 'q2'},
-        {'currentState': 'q1', 'tapeInput': 'X', 'writeTape': 'X', 'direction': 'L', 'nextState': 'q1'},
-        {'currentState': 'q1', 'tapeInput': 'B', 'writeTape': 'B', 'direction': 'L', 'nextState': 'q4'},
-        {'currentState': 'q2', 'tapeInput': '1', 'writeTape': 'X', 'direction': 'R', 'nextState': 'q3'},
-        {'currentState': 'q2', 'tapeInput': 'X', 'writeTape': 'X', 'direction': 'L', 'nextState': 'q2'},
-        {'currentState': 'q3', 'tapeInput': '1', 'writeTape': 'X', 'direction': 'L', 'nextState': 'q1'},
-        {'currentState': 'q3', 'tapeInput': '-', 'writeTape': '-', 'direction': 'R', 'nextState': 'q3'},
-        {'currentState': 'q3', 'tapeInput': 'X', 'writeTape': 'X', 'direction': 'R', 'nextState': 'q3'},
-        {'currentState': 'q3', 'tapeInput': 'B', 'writeTape': 'B', 'direction': 'L', 'nextState': 'q4'},
-        {'currentState': 'q4', 'tapeInput': '1', 'writeTape': '1', 'direction': 'R', 'nextState': 'q4'},
-        {'currentState': 'q4', 'tapeInput': '-', 'writeTape': 'B', 'direction': 'L', 'nextState': 'q4'},
-        {'currentState': 'q4', 'tapeInput': 'X', 'writeTape': 'B', 'direction': 'L', 'nextState': 'q4'},
-        {'currentState': 'q4', 'tapeInput': 'B', 'writeTape': 'B', 'direction': 'R', 'nextState': 'q5'},
-    ]
+    with open('powers2.json') as json_file:
+        data = json.load(json_file)
+        states = data["states"]
+        input_alphabet = data["inputAlphabet"]
+        tape_alphabet = data["tapeAlphabet"]
+        initial_state = data["initialState"]
+        acceptance = data["acceptance"]
+        transitions = data["transitions"]
 
-    acceptance = ['q5']
-
-    input_str = str(input('\nIngrese una cadena: '))
-    turing_machine = TuringMachine(transitions, acceptance)
-    turing_machine.tape = [*input_str, 'B']
+    # Obtener input
+    
+    w = str(input('\nIngrese una cadena: '))
+    turing_machine = TuringMachine(states, input_alphabet, tape_alphabet, initial_state, acceptance, transitions)
+    turing_machine.tape = [*w, 'B']
+    
+    # Verificar cadena
 
     print('\nDerivación:\n')
     result = turing_machine.run()
     print(f'\nEstado final: {turing_machine.state}')
-    print(f'Estado final de la cinta: {turing_machine.tape}')
+    print(f'Cadena en la cinta: {turing_machine.tape}')
     if result:
-        print(f'\nLa cadena {input_str} sí es aceptada por la máquina\n')
+        print(f'\nLa cadena {w} sí es aceptada por la máquina\n')
     else:
-        print(f'\nLa cadena {input_str} no es aceptada por la máquina\n')
+        print(f'\nLa cadena {w} no es aceptada por la máquina\n')
