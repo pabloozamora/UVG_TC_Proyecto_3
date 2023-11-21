@@ -1,7 +1,7 @@
 import json
 
 class TuringMachine:
-    def __init__(self, states, input_alphabet, tape_alphabet, initial_state, acceptance, transitions):
+    def __init__(self, states, input_alphabet, tape_alphabet, initial_state, acceptance, transitions, tape):
         self.states = states
         self.input_alphabet = input_alphabet
         self.tape_alphabet = tape_alphabet
@@ -9,7 +9,7 @@ class TuringMachine:
         self.acceptance = acceptance
         self.transitions = transitions
         self.position = 0
-        self.tape = []
+        self.tape = tape
 
     def run(self):
         for transition in self.transitions:
@@ -35,7 +35,7 @@ if __name__ == "__main__":
     
     # Obtener componentes para la máquina
     
-    with open('powers2.json') as json_file:
+    with open('substraction.json') as json_file:
         data = json.load(json_file)
         states = data["states"]
         input_alphabet = data["inputAlphabet"]
@@ -47,8 +47,7 @@ if __name__ == "__main__":
     # Obtener input
     
     w = str(input('\nIngrese una cadena: '))
-    turing_machine = TuringMachine(states, input_alphabet, tape_alphabet, initial_state, acceptance, transitions)
-    turing_machine.tape = [*w, 'B']
+    turing_machine = TuringMachine(states, input_alphabet, tape_alphabet, initial_state, acceptance, transitions, [*w, 'B'])
     
     # Verificar cadena
 
